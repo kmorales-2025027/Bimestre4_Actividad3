@@ -1,0 +1,16 @@
+CREATE DATABASE bim4_act3_in5bm;
+
+CREATE TABLE IF NOT EXISTS productos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(60) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS carrito (
+    id SERIAL PRIMARY KEY,
+    id_producto INTEGER NOT NULL,
+    cantidad INTEGER NOT NULL DEFAULT 1,
+    FOREIGN KEY (id_producto) REFERENCES productos(id)
+        ON DELETE CASCADE
+);
