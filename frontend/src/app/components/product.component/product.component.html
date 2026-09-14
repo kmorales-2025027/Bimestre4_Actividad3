@@ -13,7 +13,7 @@
             <!-- Nombre del Producto -->
             <div class="form-field">
                 <label for="nombre">Nombre del Producto</label>
-                <input" id="nombre" type="text" formControlName="nombre">
+                <input id="nombre" type="text" formControlName="nombre">
 
                 <small class="error-field" *ngIf="searchError('nombre', 'required')">
                     El nombre del producto es obligatorio.
@@ -26,7 +26,7 @@
             <!-- Precio -->
             <div class="form-field">
                 <label for="precio">Precio (Q.)</label>
-                <input id="precio" type="number" min="0.01" step="0.01">
+                <input id="precio" type="number" formControlName="precio" min="0.01" step="0.01">
 
                 <small class="error-field" *ngIf="searchError('precio', 'required')">
                     El precio del producto es obligatorio.
@@ -42,7 +42,7 @@
             <!-- Stock -->
             <div class="error-field">
                 <label for="stock">Stock</label>
-                <input id="stock" type="number" min="0" step="1">
+                <input id="stock" type="number" formControlName="stock" min="0" step="1">
 
                 <small class="error-field" *ngIf="searchError('stock', 'required')">
                     El stock del producto es obligatorio.
@@ -77,34 +77,36 @@
             <button type="button" (click)="loadProducts()">Intenta Nuevamente</button>
         </div>
 
-        <table *ngIf="productos.length != 0; else noProducts">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let pro of products">
-                    <td>{{ pro.id }}</td>
-                    <td>{{ pro.nombre }}</td>
-                    <td>{{ pro.precio }}</td>
-                    <td>Q.{{ pro.stock }}</td>
-                    <td>
-                        <div class="actions">
-                            <button type="button" (click)="editProduct(pro)">Editar</button>
-                            <button class="red-button" type="button" (click)="deleteProduct(pro)">Eliminar</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="product-list">
+            <table *ngIf="products.length != 0; else noProducts">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pro of products">
+                        <td>{{ pro.id }}</td>
+                        <td>{{ pro.nombre }}</td>
+                        <td>{{ pro.precio }}</td>
+                        <td>Q.{{ pro.stock }}</td>
+                        <td>
+                            <div class="actions">
+                                <button type="button" (click)="editProduct(pro)">Editar</button>
+                                <button class="red-button" type="button" (click)="deleteProduct(pro)">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <ng-template #noProducts>
-            <p>No se ha registrado ningún producto.</p>
-        </ng-template>
+            <ng-template #noProducts>
+                <p>No se ha registrado ningún producto.</p>
+            </ng-template>
+        </div>
     </section>
 </section>

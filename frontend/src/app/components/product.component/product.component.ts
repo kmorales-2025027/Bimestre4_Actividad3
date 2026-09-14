@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { finalize } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule],
   selector: 'app-product.component',
   styleUrl: './product.component.css',
   templateUrl: './product.component.html',
