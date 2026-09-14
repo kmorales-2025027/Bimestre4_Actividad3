@@ -27,7 +27,7 @@ app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', service: 'backend-login' });
 });
 
-const port = process.env.PORT || 3000;
+const port = Number(process.env.BACKEND_PORT) || 3000;
 
 export const server = app.listen(port, () => {
     console.log(`Backend ejecutado en http://localhost:${port}`);

@@ -3,8 +3,8 @@ import { pool } from "../db";
 
 const router = Router();
 
-function validateCart({ idProducto, cantidad }) {
-    if (!Number.isInteger(idProducto) || idProducto <= 0) {
+function validateCart({ id_producto, cantidad }) {
+    if (!Number.isInteger(id_producto) || id_producto <= 0) {
         return 'El ID del producto debe ser un número mayor a 0.';
     }
 
@@ -52,8 +52,8 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const { idProducto, cantidad } = req.body;
-    const validationError = validateCart({ idProducto, cantidad });
+    const { id_producto, cantidad } = req.body;
+    const validationError = validateCart({ id_producto, cantidad });
 
     if (validationError) {
         return res.status(400).json({ message: validationError });
@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
         const result = await pool.query(`
             INSERT INTO carrito (id_producto, cantidad)
             VALUES ($1, $2)
-            RETURNING *`, [idProducto, cantidad]
+            RETURNING *`, [id_producto, cantidad]
         );
 
         res.status(201).json(result.rows[0]);
@@ -80,8 +80,8 @@ router.put('/:id', async (req, res) => {
         return res.status(400).json({ message: 'El ID del carrito no es válido.' });
     }
 
-    const { idProducto, cantidad } = req.body;
-    const validationError = validateCart({ idProducto, cantidad });
+    const { id_producto, cantidad } = req.body;
+    const validationError = validateCart({ id_producto, cantidad });
 
     if (validationError) {
         return res.status(400).json({ message: validationError });
@@ -94,7 +94,7 @@ router.put('/:id', async (req, res) => {
             WHERE id = $3
             RETURNING *
             `,
-            [idProducto, cantidad, id]
+            [id_producto, cantidad, id]
         );
 
         if (!result.rows[0]) {

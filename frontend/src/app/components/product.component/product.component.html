@@ -1,0 +1,110 @@
+<section>
+    <h1>TechNovaGT Store</h1>
+    <p>Administra los productos disponibles.</p>
+
+    <div class="counter">
+        <p>Total de productos: <strong>{{ products.length }}</strong></p>
+    </div>
+
+    <section class="form">
+        <h2>{{ editingProductId === null ? 'Nuevo Producto' : 'Editar Producto' }}</h2>
+
+        <form [formGroup]="productForm" (ngSubmit)="submit()">
+            <!-- Nombre del Producto -->
+            <div class="form-field">
+                <label for="nombre">Nombre del Producto</label>
+                <input" id="nombre" type="text" formControlName="nombre">
+
+                <small class="error-field" *ngIf="searchError('nombre', 'required')">
+                    El nombre del producto es obligatorio.
+                </small>
+                <small class="error-field" *ngIf="searchError('nombre', 'maxlength')">
+                    El nombre del producto no puede tener más de 60 caracteres.
+                </small>
+            </div>
+
+            <!-- Precio -->
+            <div class="form-field">
+                <label for="precio">Precio (Q.)</label>
+                <input id="precio" type="number" min="0.01" step="0.01">
+
+                <small class="error-field" *ngIf="searchError('precio', 'required')">
+                    El precio del producto es obligatorio.
+                </small>
+                <small class="error-field" *ngIf="searchError('precio', 'min')">
+                    El precio del producto debe ser de al menos Q.0.01.
+                </small>
+                <small class="error-field" *ngIf="searchError('precio', 'pattern')">
+                    El precio del producto usa el formato '0.00'.
+                </small>
+            </div>
+
+            <!-- Stock -->
+            <div class="error-field">
+                <label for="stock">Stock</label>
+                <input id="stock" type="number" min="0" step="1">
+
+                <small class="error-field" *ngIf="searchError('stock', 'required')">
+                    El stock del producto es obligatorio.
+                </small>
+                <small class="error-field" *ngIf="searchError('stock', 'min')">
+                    El stock del producto debe ser de al menos 0.
+                </small>
+            </div>
+
+            <button type="submit" [disabled]="isSubmiting">
+                {{ isSubmiting ? 'Guardando...' : editingProductId === null ? 'Registrar Producto' : 'Actualizar Producto' }}
+            </button>
+
+            <button class="red-button" type="button" (click)="cancelEdit()" *ngIf="editingProductId !== null">
+                Cancelar
+            </button>
+        </form>
+
+        <div class="message" *ngIf="formMessage">{{ formMessage }}</div>
+    </section>
+
+    <section>
+        <h2>Catálogo</h2>
+
+        <button type="button" (click)="loadProducts()">
+            Actualizar
+        </button>
+
+        <p class="loading" *ngIf="isLoading">Cargando Productos...</p>
+        <div *ngIf="errorMessage">
+            <p class="loading-error">{{ errorMessage }}</p>
+            <button type="button" (click)="loadProducts()">Intenta Nuevamente</button>
+        </div>
+
+        <table *ngIf="productos.length != 0; else noProducts">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pro of products">
+                    <td>{{ pro.id }}</td>
+                    <td>{{ pro.nombre }}</td>
+                    <td>{{ pro.precio }}</td>
+                    <td>Q.{{ pro.stock }}</td>
+                    <td>
+                        <div class="actions">
+                            <button type="button" (click)="editProduct(pro)">Editar</button>
+                            <button class="red-button" type="button" (click)="deleteProduct(pro)">Eliminar</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ng-template #noProducts>
+            <p>No se ha registrado ningún producto.</p>
+        </ng-template>
+    </section>
+</section>
