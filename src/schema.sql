@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS productos (
 
 CREATE TABLE IF NOT EXISTS carrito (
     id SERIAL PRIMARY KEY,
-    id_producto INTEGER NOT NULL,
+    id_producto INTEGER NOT NULL UNIQUE,
     cantidad INTEGER NOT NULL DEFAULT 1,
     FOREIGN KEY (id_producto) REFERENCES productos(id)
         ON DELETE CASCADE
