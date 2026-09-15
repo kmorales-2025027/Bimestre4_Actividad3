@@ -41,3 +41,18 @@
     padding: 10px;
     border-radius: 6px;
 }
+
+.cart-summary {
+    margin-top: 20px;
+    text-align: right;
+    padding: 15px 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.cart-summary h3 {
+    color: #1e293b;
+    margin: 0;
+    font-size: 1.25rem;
+}

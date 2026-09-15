@@ -23,6 +23,7 @@
                     <th>Precio Unitario</th>
                     <th>Cantidad</th>
                     <th>Eliminar del Carrito</th>
+                    <th>Subtotal</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,9 +36,14 @@
                             <button class="red-button" type="button" (click)="deleteCart(item)">🗑️</button>
                         </div>
                     </td>
+                    <td>Q.{{ item.precio | subtotal: item.cantidad }}</td>
                 </tr>
             </tbody>
         </table>
+
+        <div class="cart-summary" *ngIf="cart.length > 0">
+            <h3>Total General: Q.{{ cart | totalCart }}</h3>
+        </div>
 
         <ng-template #emptyCart>
             <p>Tu carrito está vacío.</p>

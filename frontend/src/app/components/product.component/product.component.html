@@ -77,6 +77,9 @@
         <div *ngIf="errorMessage">
             <p class="loading-error">{{ errorMessage }}</p>
         </div>
+        <div *ngIf="tableMessage">
+            <p class="message">{{ tableMessage }}</p>
+        </div>
 
         <div class="product-list" *ngIf="!isLoading">
             <table *ngIf="products.length > 0; else noProducts">

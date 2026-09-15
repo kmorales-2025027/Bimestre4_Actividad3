@@ -4,9 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { CartResponse } from '../../models/cart.model';
 import { finalize } from 'rxjs';
+import { SubtotalPipe } from '../../pipes/subtotal-pipe';
+import { TotalCartPipe } from '../../pipes/total-cart-pipe';
 
 @Component({
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SubtotalPipe, TotalCartPipe],
   selector: 'app-cart',
   styleUrl: './cart.component.css',
   templateUrl: './cart.component.html',

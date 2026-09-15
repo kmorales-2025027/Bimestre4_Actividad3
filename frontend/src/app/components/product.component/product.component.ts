@@ -30,6 +30,7 @@ export class ProductComponent implements OnInit {
   isSubmiting = false;
   errorMessage = '';
   formMessage = '';
+  tableMessage = '';
   retryMessage = 'Actualizar';
 
   ngOnInit(): void {
@@ -132,7 +133,7 @@ export class ProductComponent implements OnInit {
           if (this.editingProductId === product.id) {
             this.cancelEdit();
           }
-          this.formMessage = 'Producto eliminado exitosamente.';
+          this.tableMessage = 'Producto eliminado exitosamente.';
           this.loadProducts();
         },
         error: (error) => {
@@ -146,13 +147,10 @@ export class ProductComponent implements OnInit {
 
     this.cartService
       .postCart(cartItem)
-      .pipe(finalize(() => {
-        this.loadProducts();
-        this.detector.detectChanges();
-      }))
       .subscribe({
         next: () => {
-          this.formMessage = `"${product.nombre}" se ha agregado al carrito.`;
+          this.tableMessage = `"${product.nombre}" se ha agregado al carrito.`;
+          this.loadProducts();
         },
         error: (error) => {
           this.errorMessage = this.getErrorMessage(error, 'No se pudo agregar al carrito.');
