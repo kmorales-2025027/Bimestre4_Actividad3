@@ -1,0 +1,43 @@
+:host {
+    display: block;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.red-button {
+    background-color: #dc2626;
+}
+
+.red-button:hover {
+    background-color: #b91c1c;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+}
+
+.message {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #dcfce7;
+    color: #166534;
+    border-radius: 6px;
+    border: 1px solid #bbf7d0;
+}
+
+.loading {
+    font-style: italic;
+    color: #d97706;
+}
+
+.loading-error {
+    color: #dc2626;
+    background-color: #fee2e2;
+    padding: 10px;
+    border-radius: 6px;
+}

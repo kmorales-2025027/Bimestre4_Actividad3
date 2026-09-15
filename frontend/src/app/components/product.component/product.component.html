@@ -6,7 +6,7 @@
         <p>Total de productos: <strong>{{ products.length }}</strong></p>
     </div>
 
-    <section class="form">
+    <section class="form card-container">
         <h2>{{ editingProductId === null ? 'Nuevo Producto' : 'Editar Producto' }}</h2>
 
         <form [formGroup]="productForm" (ngSubmit)="submit()">
@@ -52,13 +52,15 @@
                 </small>
             </div>
 
-            <button type="submit" [disabled]="isSubmiting">
-                {{ isSubmiting ? 'Guardando...' : editingProductId === null ? 'Registrar Producto' : 'Actualizar Producto' }}
-            </button>
+            <div class="form-actions">
+                <button type="submit" [disabled]="isSubmiting">
+                    {{ isSubmiting ? 'Guardando...' : editingProductId === null ? 'Registrar Producto' : 'Actualizar Producto' }}
+                </button>
 
-            <button class="red-button" type="button" (click)="cancelEdit()" *ngIf="editingProductId !== null">
-                Cancelar
-            </button>
+                <button class="red-button" type="button" (click)="cancelEdit()" *ngIf="editingProductId !== null">
+                    Cancelar
+                </button>
+            </div>
         </form>
 
         <div class="message" *ngIf="formMessage">{{ formMessage }}</div>
@@ -67,7 +69,7 @@
     <section>
         <h2>Catálogo</h2>
 
-        <button type="button" (click)="loadProducts()">
+        <button class="retry-btn" type="button" (click)="loadProducts()">
             {{ retryMessage }}
         </button>
 
