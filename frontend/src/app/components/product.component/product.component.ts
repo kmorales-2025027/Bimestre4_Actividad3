@@ -1,19 +1,22 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
-  selector: 'app-product.component',
+  selector: 'app-product',
   styleUrl: './product.component.css',
   templateUrl: './product.component.html',
 })
 export class ProductComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
+  private readonly detector = inject(ChangeDetectorRef);
 
   readonly productForm = this.fb.nonNullable.group({
     nombre: ['', [Validators.required, Validators.maxLength(60)]],
@@ -27,6 +30,7 @@ export class ProductComponent implements OnInit {
   isSubmiting = false;
   errorMessage = '';
   formMessage = '';
+  retryMessage = 'Actualizar';
 
   ngOnInit(): void {
     this.loadProducts();
@@ -43,13 +47,20 @@ export class ProductComponent implements OnInit {
 
     this.productService
       .getProducts()
-      .pipe(finalize(() => (this.isLoading = false)))
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.detector.detectChanges(); // Forzamos la renderización para que desaparezca el mensaje de cargando
+        }),
+      )
       .subscribe({
         next: (response) => {
           this.products = response;
+          this.retryMessage = 'Actualizar';
         },
         error: (error) => {
           this.errorMessage = this.getErrorMessage(error, 'No fue posible cargar los productos.');
+          this.retryMessage = 'Intenta Nuevamente';
         },
       });
   }
@@ -73,14 +84,20 @@ export class ProductComponent implements OnInit {
       : 'Producto actualizado exitosamente.';
 
     this.isSubmiting = true;
-    request.pipe(finalize(() => (this.isSubmiting = false))).subscribe({
+    request.pipe(
+      finalize(() => {
+        this.isSubmiting = false;
+        this.detector.detectChanges();
+      }),
+    )
+    .subscribe({
       next: () => {
         this.cancelEdit();
         this.formMessage = successMessage;
         this.loadProducts();
       },
       error: (error) => {
-        this.formMessage = this.getErrorMessage(error, 'No se pudo guardar el producto.');
+        this.errorMessage = this.getErrorMessage(error, 'No se pudo guardar el producto.');
       },
     });
   }
@@ -91,8 +108,8 @@ export class ProductComponent implements OnInit {
 
     this.productForm.setValue({
       nombre: product.nombre,
-      precio: product.precio,
-      stock: product.stock,
+      precio: Number(product.precio),
+      stock: Number(product.stock),
     });
   }
 
@@ -110,16 +127,35 @@ export class ProductComponent implements OnInit {
 
     this.productService
       .deleteProduct(product.id)
-      .pipe()
       .subscribe({
         next: () => {
           if (this.editingProductId === product.id) {
             this.cancelEdit();
           }
           this.formMessage = 'Producto eliminado exitosamente.';
+          this.loadProducts();
         },
         error: (error) => {
-          this.formMessage = this.getErrorMessage(error, 'No se pudo eliminar el producto.');
+          this.errorMessage = this.getErrorMessage(error, 'No se pudo eliminar el producto.');
+        },
+      });
+  }
+
+  addToCart(product: Product): void {
+    const cartItem = { id_producto: product.id, cantidad: 1 };
+
+    this.cartService
+      .postCart(cartItem)
+      .pipe(finalize(() => {
+        this.loadProducts();
+        this.detector.detectChanges();
+      }))
+      .subscribe({
+        next: () => {
+          this.formMessage = `"${product.nombre}" se ha agregado al carrito.`;
+        },
+        error: (error) => {
+          this.errorMessage = this.getErrorMessage(error, 'No se pudo agregar al carrito.');
         },
       });
   }

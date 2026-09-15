@@ -40,7 +40,7 @@
             </div>
 
             <!-- Stock -->
-            <div class="error-field">
+            <div class="form-field">
                 <label for="stock">Stock</label>
                 <input id="stock" type="number" formControlName="stock" min="0" step="1">
 
@@ -68,17 +68,16 @@
         <h2>Catálogo</h2>
 
         <button type="button" (click)="loadProducts()">
-            Actualizar
+            {{ retryMessage }}
         </button>
 
         <p class="loading" *ngIf="isLoading">Cargando Productos...</p>
         <div *ngIf="errorMessage">
             <p class="loading-error">{{ errorMessage }}</p>
-            <button type="button" (click)="loadProducts()">Intenta Nuevamente</button>
         </div>
 
-        <div class="product-list">
-            <table *ngIf="products.length != 0; else noProducts">
+        <div class="product-list" *ngIf="!isLoading">
+            <table *ngIf="products.length > 0; else noProducts">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -92,11 +91,12 @@
                     <tr *ngFor="let pro of products">
                         <td>{{ pro.id }}</td>
                         <td>{{ pro.nombre }}</td>
-                        <td>{{ pro.precio }}</td>
-                        <td>Q.{{ pro.stock }}</td>
+                        <td>Q.{{ pro.precio }}</td>
+                        <td>{{ pro.stock }}</td>
                         <td>
                             <div class="actions">
                                 <button type="button" (click)="editProduct(pro)">Editar</button>
+                                <button class="cart-button" type="button" (click)="addToCart(pro)">Añadir al Carrito</button>
                                 <button class="red-button" type="button" (click)="deleteProduct(pro)">Eliminar</button>
                             </div>
                         </td>

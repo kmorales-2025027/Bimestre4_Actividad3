@@ -1,0 +1,46 @@
+<section>
+    <h2>Mi Carrito</h2>
+    <p>Administra tu compra.</p>
+
+    <button type="button" (click)="loadCart()">
+        {{ retryMessage }}
+    </button>
+
+    <p class="loading" *ngIf="isLoading">Cargando Productos...</p>
+    <div *ngIf="errorMessage">
+        <p class="loading-error">{{ errorMessage }}</p>
+    </div>
+
+    <div *ngIf="actionMessage">
+        <p class="message">{{ actionMessage }}</p>
+    </div>
+
+    <div class="cart">
+        <table *ngIf="cart.length > 0; else emptyCart">
+            <thead>
+                <tr>
+                    <th>Nombre del Producto</th>
+                    <th>Precio Unitario</th>
+                    <th>Cantidad</th>
+                    <th>Eliminar del Carrito</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of cart">
+                    <td>{{ item.nombre }}</td>
+                    <td>Q.{{ item.precio }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>
+                        <div class="actions">
+                            <button class="red-button" type="button" (click)="deleteCart(item)">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ng-template #emptyCart>
+            <p>Tu carrito está vacío.</p>
+        </ng-template>
+    </div>
+</section>
